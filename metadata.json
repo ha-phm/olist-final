@@ -1,0 +1,6 @@
+{
+  "name": "Olist Data Hub System",
+  "description": "An interactive e-commerce analytics system visualizing Brazilian Olist datasets, incorporating Python cleaning, Express REST APIs, custom React charts, and role-based access control.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
