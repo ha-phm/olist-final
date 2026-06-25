@@ -79,23 +79,23 @@ export default function AppMain() {
     
     switch (currentPage) {
       case 'overview':
-        return <OverviewDashboard filters={filters} currency={currency} />;
+        return <OverviewDashboard filters={filters} />;
         
       case 'customers':
         if (role === 'Admin' || role === 'Business Analyst') {
-          return <CustomersDashboard filters={filters} currency={currency} />;
+          return <CustomersDashboard filters={filters}  />;
         }
         break;
         
       case 'products':
         if (role === 'Admin' || role === 'Business Analyst') {
-          return <ProductsDashboard filters={filters} currency={currency} />;
+          return <ProductsDashboard filters={filters}  />;
         }
         break;
         
       case 'orders':
         if (role === 'Admin' || role === 'Business Analyst' || role === 'Seller Manager') {
-          return <OrdersDashboard filters={filters} currency={currency} />;
+          return <OrdersDashboard filters={filters}  />;
         }
         break;
         
@@ -112,7 +112,7 @@ export default function AppMain() {
         break;
         
       default:
-        return <OverviewDashboard filters={filters} currency={currency} />;
+        return <OverviewDashboard filters={filters} />;
     }
     
     // In case of blocked roles
@@ -141,8 +141,6 @@ export default function AppMain() {
         <Header 
           currentUser={currentUser} 
           onLogout={handleLogout}
-          currency={currency}
-          onCurrencyChange={setCurrency}
           filters={filters}
           onFilterChange={setFilters}
           categories={categories}

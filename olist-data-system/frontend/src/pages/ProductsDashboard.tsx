@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { 
-  Package, Layers, DollarSign, ArrowUpRight, BarChart3, PieChartIcon 
+  Package, Layers, ArrowUpRight, BarChart3, PieChartIcon 
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, 
@@ -15,10 +15,9 @@ import { formatNumber, formatCurrency } from '../utils/format';
 
 interface ProductsDashboardProps {
   filters: any;
-  currency: 'BRL' | 'VND' | 'USD';
 }
 
-export default function ProductsDashboard({ filters, currency }: ProductsDashboardProps) {
+export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,6 +46,7 @@ export default function ProductsDashboard({ filters, currency }: ProductsDashboa
   }
 
   const { kpis, categoryDistribution, topProducts } = data;
+  const currency = 'VND';
   const COLORS = ['#4f46e5', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
 
   return (
@@ -157,7 +157,7 @@ export default function ProductsDashboard({ filters, currency }: ProductsDashboa
                 <div key={index} className="space-y-1">
                   <div className="flex justify-between text-xs font-semibold text-slate-700">
                     <span className="truncate max-w-40">{c.name}</span>
-                    <span className="font-mono">{formatCurrency(c.revenue, currency)}</span>
+                    <span className="font-mono">{formatNumber(c.revenue)}</span>
                   </div>
                   <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                     <div 
@@ -202,7 +202,7 @@ export default function ProductsDashboard({ filters, currency }: ProductsDashboa
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-sans text-xs text-slate-600">
-              {topProducts.map((p, idx) => (
+              {topProducts.map((p: any, idx: number) => (
                 <tr key={idx} className="hover:bg-slate-50/40 transition-colors">
                   <td className="py-4 px-6">
                     <span className={`w-6 h-6 rounded-full inline-flex items-center justify-center text-[11px] font-extrabold ${

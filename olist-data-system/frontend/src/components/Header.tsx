@@ -1,5 +1,4 @@
-import { LogOut, User, Bell, ShieldCheck, Database, Calendar } from 'lucide-react';
-import { authService } from '../services/api';
+import { LogOut, ShieldCheck, Database, Calendar } from 'lucide-react';
 
 interface HeaderProps {
   currentUser: {
@@ -8,8 +7,7 @@ interface HeaderProps {
     label: string;
   } | null;
   onLogout: () => void;
-  currency: 'BRL' | 'VND' | 'USD';
-  onCurrencyChange: (currency: 'BRL' | 'VND' | 'USD') => void;
+
   filters: {
     startDate: string;
     endDate: string;
@@ -26,8 +24,6 @@ interface HeaderProps {
 export default function Header({
   currentUser,
   onLogout,
-  currency,
-  onCurrencyChange,
   filters,
   onFilterChange,
   categories,
@@ -113,23 +109,7 @@ export default function Header({
 
       {/* Profile & Currency settings */}
       <div className="flex items-center gap-4 justify-between md:justify-end border-t md:border-t-0 pt-4 md:pt-0 border-slate-100">
-        {/* Currency Switcher */}
-        <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-          {(['BRL', 'VND', 'USD'] as const).map((curr) => (
-            <button
-              key={curr}
-              id={`curr-${curr}`}
-              onClick={() => onCurrencyChange(curr)}
-              className={`text-[10px] font-bold px-2 py-1 rounded-md transition-all ${
-                currency === curr 
-                  ? 'bg-white text-indigo-600 shadow-xs' 
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              {curr === 'BRL' ? 'R$' : curr === 'VND' ? 'đ' : '$'}
-            </button>
-          ))}
-        </div>
+       
 
         {/* User Badges */}
         {currentUser && (
