@@ -43,10 +43,7 @@ export default function Header({
     <header id="app-header" className="bg-white border-b border-slate-200 sticky top-0 z-40 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-xs">
       {/* Brand Search and Filter Controls */}
       <div className="flex flex-wrap items-center gap-4 flex-1">
-        <div className="flex items-center gap-2">
-          <Database className="w-5 h-5 text-indigo-600" />
-          <span className="font-mono text-sm uppercase tracking-wide font-black text-slate-700">Filter Engine</span>
-        </div>
+        
         
         {/* Date Filters */}
         <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1 text-xs">

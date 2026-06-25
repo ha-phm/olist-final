@@ -48,6 +48,11 @@ export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
   const currency = 'VND';
   const COLORS = ['#4f46e5', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
 
+  // ==========================================
+  // ĐÃ SỬA: TÍNH TỔNG DOANH THU TOÀN BỘ NGÀNH HÀNG
+  // ==========================================
+  const totalRevenue = categoryDistribution?.reduce((sum: number, item: any) => sum + (item.revenue || 0), 0) || 1;
+
   return (
     <div id="products-dashboard" className="space-y-6">
       
@@ -141,8 +146,11 @@ export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
 
           <div className="space-y-4 flex-1 overflow-y-auto max-h-[310px] pr-2">
             {categoryDistribution.slice(0, 6).map((c: any, index: number) => {
-              const maxVal = categoryDistribution[0]?.revenue || 1;
-              const percent = Math.round((c.revenue / maxVal) * 100);
+              
+              // ==========================================
+              // ĐÃ SỬA: CHIA CHO TỔNG THAY VÌ CHIA CHO MAX
+              // ==========================================
+              const percent = Math.round((c.revenue / totalRevenue) * 100);
 
               return (
                 <div key={index} className="space-y-1">

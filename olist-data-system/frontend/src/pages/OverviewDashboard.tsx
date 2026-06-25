@@ -122,9 +122,6 @@ export default function OverviewDashboard({ filters }: OverviewDashboardProps) {
               <BarChart3 className="w-4 h-4 text-indigo-500" />
               Biểu đồ doanh thu theo thời gian
             </h3>
-            <span className="text-[10px] bg-indigo-50 text-indigo-700 font-mono font-bold px-2 py-0.5 rounded-sm">
-              Doanh thu hàng tháng
-            </span>
           </div>
 
           <div className="h-80 w-full">
@@ -166,9 +163,6 @@ export default function OverviewDashboard({ filters }: OverviewDashboardProps) {
               <Compass className="w-4 h-4 text-emerald-500" />
               Sản lượng đơn hàng
             </h3>
-            <span className="text-[10px] bg-emerald-50 text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-sm">
-              Số lượng Đơn
-            </span>
           </div>
 
           <div className="h-80 w-full">
