@@ -5,8 +5,7 @@ import {
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, 
-  ResponsiveContainer, BarChart, Bar, Legend 
-} from 'recharts';
+  ResponsiveContainer, BarChart, Bar} from 'recharts';
 import { motion } from 'motion/react';
 
 import KPIWidget from '../components/KPIWidget';
@@ -56,7 +55,7 @@ export default function OverviewDashboard({ filters, currency }: OverviewDashboa
         <div>
           <h2 className="font-sans font-black text-xl text-slate-800 tracking-tight flex items-center gap-2">
             <Presentation className="w-5 h-5 text-indigo-600" />
-            Bảng điều khiển Tổng Quan (Overview Board)
+            Bảng điều khiển Tổng Quan 
           </h2>
           <p className="text-xs text-slate-400 mt-1">
             Tổng hợp dữ liệu e-commerce Olist, phân tích xu hướng tăng trưởng doanh thu tháng/năm.
@@ -194,34 +193,6 @@ export default function OverviewDashboard({ filters, currency }: OverviewDashboa
         </motion.div>
 
       </div>
-
-      {/* Dynamic growth insights */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-        className="bg-indigo-950 text-slate-200 border border-indigo-900 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6"
-      >
-        <div className="flex items-center gap-4">
-          <div className="bg-indigo-800 text-indigo-400 p-3 rounded-2xl">
-            <Flame className="w-6 h-6 animate-pulse" />
-          </div>
-          <div>
-            <h4 className="font-sans font-bold text-sm text-slate-100 tracking-tight">Chiến lược kinh doanh thương mại</h4>
-            <p className="text-xs text-slate-400 mt-1 max-w-xl">
-              Doanh thu Olist có xu hướng cao nhất vào Quý 3 và đầu Quý 4 nhờ sự thúc đẩy của sự kiện Black Friday. Có sự phân bố vị trí địa lý tập trung tại bang São Paulo (SP) với hơn 60% tổng lượng đơn hàng.
-            </p>
-          </div>
-        </div>
-        
-        <div className="text-center font-sans tracking-tight bg-indigo-900/40 border border-indigo-800 px-5 py-3 rounded-2xl">
-          <div className="text-xs text-slate-400">Tăng trưởng năm nay (YoY)</div>
-          <div className="text-xl font-black text-indigo-400 flex items-center justify-center gap-1 mt-0.5">
-            <ArrowUpRight className="w-5 h-5 text-emerald-400" />
-            +28.4%
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 }

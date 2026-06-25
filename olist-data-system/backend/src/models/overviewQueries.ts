@@ -94,8 +94,8 @@ export async function fetchOverviewMetrics(filters?: OverviewFilters) {
     // Sử dụng TO_CHAR để định dạng tháng rút gọn (Jan, Feb, Mar...)
     const monthlyQuery = `
       SELECT 
-        TO_CHAR(o.order_purchase_timestamp::timestamp, 'Mon') as month_name, 
-        EXTRACT(MONTH FROM o.order_purchase_timestamp::timestamp) as month_num,
+        TO_CHAR(o.order_purchase_timestamp::timestamp, 'Mon YYYY') as month_name, 
+        TO_CHAR(o.order_purchase_timestamp::timestamp, 'YYYY-MM') as sort_date,
         COALESCE(SUM(i.price), 0) as revenue,
         COUNT(DISTINCT o.order_id) as orders
       FROM olist_orders o
@@ -104,8 +104,8 @@ export async function fetchOverviewMetrics(filters?: OverviewFilters) {
       LEFT JOIN olist_products p ON i.product_id = p.product_id
       LEFT JOIN clean_translations t ON p.product_category_name = t.product_category_name
       ${whereClause}
-      GROUP BY month_name, month_num
-      ORDER BY month_num ASC
+      GROUP BY month_name, sort_date
+      ORDER BY sort_date ASC
     `;
 
     const monthlyResult = await db.query(monthlyQuery, params);
