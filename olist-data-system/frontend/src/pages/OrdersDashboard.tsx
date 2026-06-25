@@ -34,6 +34,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function OrdersDashboard({ filters }: OrdersDashboardProps) {
+  console.log("Filters đang nhận tại Dashboard:", filters);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   

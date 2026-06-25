@@ -140,8 +140,8 @@ export async function fetchReviewsMetrics(filters?: ReviewFilters) {
     const badCategoriesQuery = `
       SELECT 
         COALESCE(t.product_category_name_english, p.product_category_name, 'Khác') as category,
-        COUNT(r.review_id) as total_cat_reviews,
-        (SUM(CASE WHEN r.review_score <= 2 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(r.review_id), 0)) as bad_rate
+        COUNT(DISTINCT r.review_id) as total_cat_reviews,
+        (COUNT(DISTINCT CASE WHEN r.review_score <= 2 THEN r.review_id END) * 100.0 / NULLIF(COUNT(DISTINCT r.review_id), 0)) as bad_rate
       FROM olist_order_reviews r
       INNER JOIN olist_orders o ON r.order_id = o.order_id
       LEFT JOIN olist_customers c ON o.customer_id = c.customer_id
@@ -160,7 +160,7 @@ export async function fetchReviewsMetrics(filters?: ReviewFilters) {
       SELECT 
         i.seller_id,
         COUNT(DISTINCT r.review_id) as total_seller_reviews,
-        (SUM(CASE WHEN r.review_score <= 2 THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(DISTINCT r.review_id), 0)) as bad_rate
+        (COUNT(DISTINCT CASE WHEN r.review_score <= 2 THEN r.review_id END) * 100.0 / NULLIF(COUNT(DISTINCT r.review_id), 0)) as bad_rate
       FROM olist_order_reviews r
       INNER JOIN olist_orders o ON r.order_id = o.order_id
       LEFT JOIN olist_customers c ON o.customer_id = c.customer_id
