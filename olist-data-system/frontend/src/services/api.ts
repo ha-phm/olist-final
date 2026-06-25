@@ -100,4 +100,27 @@ export const orderService = {
     return response.data;
   }
 };
+
+// Thêm vào file api.ts
+export const adminService = {
+  // Quản lý người dùng
+  getUsers: async () => {
+    const response = await api.get('/api/admin/users');
+    return response.data;
+  },
+  createUser: async (userData: { username: string; role: string; label: string }) => {
+    const response = await api.post('/api/admin/users', userData);
+    return response.data;
+  },
+  deleteUser: async (id: string) => {
+    const response = await api.delete(`/api/admin/users/${id}`);
+    return response.data;
+  },
+  
+  // Quản lý Audit Logs
+  getAuditLogs: async () => {
+    const response = await api.get('/api/audit/logs');
+    return response.data;
+  }
+};
 export default api;

@@ -52,12 +52,6 @@ export default function Sidebar({ currentPage, onPageChange, currentUser }: Side
       icon: Star, 
       allowedRoles: ['Admin', 'Business Analyst', 'Seller Manager'] 
     },
-    { 
-      id: 'admin_panel', 
-      label: 'Nhật ký & Quyền', 
-      icon: Shield, 
-      allowedRoles: ['Admin'] 
-    }
   ];
 
   const hasAccess = (item: typeof menuItems[0]) => {
@@ -113,16 +107,6 @@ export default function Sidebar({ currentPage, onPageChange, currentUser }: Side
           );
         })}
       </nav>
-
-      {/* Info card footer */}
-      <div className="p-4 border-t border-slate-800 m-4 bg-slate-950/40 rounded-xl border border-slate-800/40">
-        <div className="flex items-start gap-2.5">
-          <Info className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
-          <div className="text-[11px] text-slate-400 font-sans leading-relaxed">
-            <span className="font-bold text-slate-300">RBAC Hoạt động:</span> Vai trò này giới hạn các bảng dữ liệu có thể truy cập để đảm bảo an toàn bảo mật.
-          </div>
-        </div>
-      </div>
     </aside>
   );
 }

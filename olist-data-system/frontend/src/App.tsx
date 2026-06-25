@@ -6,7 +6,7 @@ import ProductsDashboard from './pages/ProductsDashboard';
 import OrdersDashboard from './pages/OrdersDashboard';
 import SellersDashboard from './pages/SellersDashboard';
 import ReviewsDashboard from './pages/ReviewsDashboard';
-import SettingsDashboard from './pages/SettingsDashboard';
+
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -101,19 +101,13 @@ export default function AppMain() {
         
       case 'sellers':
         if (role === 'Admin' || role === 'Business Analyst' || role === 'Seller Manager') {
-          return <SellersDashboard filters={filters} currency={currency} />;
+          return <SellersDashboard filters={filters} />;
         }
         break;
         
       case 'reviews':
         if (role === 'Admin' || role === 'Business Analyst' || role === 'Seller Manager') {
           return <ReviewsDashboard filters={filters} />;
-        }
-        break;
-        
-      case 'admin_panel':
-        if (role === 'Admin') {
-          return <SettingsDashboard />;
         }
         break;
         
