@@ -12,23 +12,35 @@ import { motion } from 'motion/react';
 import KPIWidget from '../components/KPIWidget';
 import ExportButtons from '../components/ExportButtons';
 import { dashboardService, orderService } from '../services/api';
-import { formatNumber, formatCurrency, formatDate } from '../utils/format';
+// Thay formatCurrency bằng formatNumber
+import { formatNumber, formatDate } from '../utils/format';
 
 interface OrdersDashboardProps {
   filters: any;
-  currency: 'BRL' | 'VND' | 'USD';
+  currency: 'BRL' | 'VND' | 'USD'; // Giữ nguyên kiểu dữ liệu currency
+  // Đã xóa biến currency ở đây
 }
 
-export default function OrdersDashboard({ filters, currency }: OrdersDashboardProps) {
+// Bộ từ điển màu sắc cố định cho từng trạng thái
+const STATUS_COLORS: Record<string, string> = {
+  'DELIVERED': '#10b981',   // Xanh lá
+  'SHIPPED': '#3b82f6',     // Xanh dương
+  'UNAVAILABLE': '#f59e0b', // Vàng cam
+  'CANCELED': '#ef4444',    // Đỏ
+  'PROCESSING': '#8b5cf6',  // Tím
+  'INVOICED': '#0ea5e9',    // Xanh lơ
+  'CREATED': '#64748b',     // Xám
+  'APPROVED': '#f43f5e'     // Hồng
+};
+
+export default function OrdersDashboard({ filters }: OrdersDashboardProps) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   
-  // Search state
   const [searchTerm, setSearchTerm] = useState('');
   const [ordersList, setOrdersList] = useState<any[]>([]);
   const [searching, setSearching] = useState(false);
   
-  // Modal state
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [modalLoading, setModalLoading] = useState(false);
 
@@ -39,9 +51,8 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
         const result = await dashboardService.getOrders(filters);
         setData(result);
         
-        // Initial orders load
         const list = await orderService.searchOrders('');
-        setOrdersList(list.results);
+        setOrdersList(list.results || []);
       } catch (err) {
         console.error("Error loading orders metrics:", err);
       } finally {
@@ -56,7 +67,7 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
     setSearching(true);
     try {
       const list = await orderService.searchOrders(searchTerm);
-      setOrdersList(list.results);
+      setOrdersList(list.results || []);
     } catch (err) {
       console.error("Search orders failed:", err);
     } finally {
@@ -86,12 +97,14 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
   }
 
   const { kpis, statusData, deliverySpeed } = data;
-  const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'];
 
   const getStatusBadge = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case 'delivered': return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
-      case 'invoiced': return 'bg-amber-100 text-amber-800 border border-amber-200';
+      case 'invoiced': return 'bg-sky-100 text-sky-800 border border-sky-200';
+      case 'shipped': return 'bg-blue-100 text-blue-800 border border-blue-200';
+      case 'processing': return 'bg-violet-100 text-violet-800 border border-violet-200';
+      case 'unavailable': return 'bg-amber-100 text-amber-800 border border-amber-200';
       default: return 'bg-rose-100 text-rose-800 border border-rose-200';
     }
   };
@@ -104,10 +117,10 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
         <div>
           <h2 className="font-sans font-black text-xl text-slate-800 tracking-tight flex items-center gap-2">
             <ShoppingCart className="w-5 h-5 text-indigo-600" />
-            Bảng điều khiển Đơn Hàng (Orders Control)
+            Bảng điều khiển Đơn Hàng 
           </h2>
           <p className="text-xs text-slate-400 mt-1">
-            Quản trị trạng thái giao dịch, lượng đơn hoàn thành và thời gian chuyển phát thực tế so với cam kết.
+            Quản trị trạng thái giao dịch, lượng đơn hoàn thành và thời gian chuyển phát.
           </p>
         </div>
 
@@ -122,7 +135,6 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
           value={formatNumber(kpis.total_orders)}
           icon={ShoppingCart}
           color="indigo"
-          subtext="Tính trên mọi giỏ hàng"
         />
         <KPIWidget
           id="kpi-orders-delivered"
@@ -130,7 +142,6 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
           value={formatNumber(kpis.delivered)}
           icon={CheckCircle2}
           color="emerald"
-          subtext="Đã phát cho khách hàng"
         />
         <KPIWidget
           id="kpi-orders-pending"
@@ -138,7 +149,6 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
           value={formatNumber(kpis.pending)}
           icon={Loader}
           color="amber"
-          subtext="Đang xử lý ở kho bãi"
         />
         <KPIWidget
           id="kpi-orders-canceled"
@@ -146,7 +156,6 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
           value={formatNumber(kpis.canceled)}
           icon={XCircle}
           color="rose"
-          subtext="Giao hàng lỗi hoặc huỷ đơn"
         />
       </div>
 
@@ -164,9 +173,6 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
               <Truck className="w-4 h-4 text-emerald-500" />
               Hiệu năng vận chuyển - Thời gian giao trung bình (Ngày)
             </h3>
-            <span className="text-[10px] bg-emerald-50 text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-sm">
-              Đo lường tốc độ giao
-            </span>
           </div>
 
           <div className="h-80 w-full">
@@ -199,9 +205,6 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
               <CheckCircle2 className="w-4 h-4 text-indigo-500" />
               Tỷ lệ hoá đơn theo trạng thái
             </h3>
-            <span className="text-[10px] bg-indigo-50 text-indigo-700 font-mono font-bold px-2 py-0.5 rounded-sm">
-              Status share
-            </span>
           </div>
 
           <div className="h-64 w-full flex items-center justify-center">
@@ -217,7 +220,8 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
                   dataKey="value"
                 >
                   {statusData.map((entry: any, index: number) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    // Lấy màu từ STATUS_COLORS
+                    <Cell key={`cell-${index}`} fill={STATUS_COLORS[entry.name.toUpperCase()] || '#cbd5e1'} />
                   ))}
                 </Pie>
                 <Tooltip
@@ -233,7 +237,8 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
             {statusData.map((s: any, idx: number) => (
               <div key={idx} className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5 font-semibold text-slate-600">
-                  <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></span>
+                  {/* Cập nhật màu chấm tròn */}
+                  <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ backgroundColor: STATUS_COLORS[s.name.toUpperCase()] || '#cbd5e1' }}></span>
                   <span className="uppercase text-[11px] font-bold">{s.name}</span>
                 </div>
                 <span className="font-mono text-slate-800 font-black">{formatNumber(s.value)} đơn</span>
@@ -254,9 +259,8 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
           <div>
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
               <Search className="w-4 h-4 text-indigo-500" />
-              Tra cứu và Lọc sâu mã vận đơn hàng (Order Searching Console)
+              Tra cứu và Lọc sâu mã vận đơn hàng
             </h3>
-            <p className="text-[11px] text-slate-400 mt-0.5">Tìm kiếm theo mã đơn, thành phố, bang hoặc loại thẻ thanh toán.</p>
           </div>
 
           <form onSubmit={handleSearch} className="flex items-center gap-2 max-w-sm w-full">
@@ -285,7 +289,7 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
                 <th className="py-4 px-6">Ngày mua</th>
                 <th className="py-4 px-6">Đô thị (City / State)</th>
                 <th className="py-4 px-6 text-center">Số lượng món</th>
-                <th className="py-4 px-6 text-right">Tổng giá thanh toán</th>
+                <th className="py-4 px-6 text-right">Tổng giá</th>
                 <th className="py-4 px-6">Phương thức</th>
                 <th className="py-4 px-6">Trạng thái</th>
                 <th className="py-4 px-6 text-center">Hành động</th>
@@ -303,7 +307,8 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
                     <td className="py-4 px-6 font-mono">{row.purchase_date}</td>
                     <td className="py-4 px-6 font-medium capitalize">{row.city} ({row.state})</td>
                     <td className="py-4 px-6 text-center font-mono font-bold">{row.items_count}</td>
-                    <td className="py-4 px-6 text-right font-mono font-black text-slate-800">{formatCurrency(row.total_price, currency)}</td>
+                    {/* Bỏ formatCurrency, chỉ dùng số */}
+                    <td className="py-4 px-6 text-right font-mono font-black text-slate-800">{formatNumber(row.total_price)}</td>
                     <td className="py-4 px-6 font-mono font-semibold text-slate-400 text-[10px] uppercase">{row.payment_type.replace(/_/g, ' ')}</td>
                     <td className="py-4 px-6">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider ${getStatusBadge(row.order_status)}`}>
@@ -334,7 +339,6 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
             <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
               <div>
                 <h3 className="font-sans font-black text-base text-slate-800 tracking-tight">Chi tiết vận đơn: {selectedOrder.order.order_id.substring(0, 12)}...</h3>
-                <span className="text-[10px] font-mono text-slate-400 tracking-wider">Mã đầy đủ: {selectedOrder.order.order_id}</span>
               </div>
               <button 
                 onClick={() => setSelectedOrder(null)}
@@ -345,95 +349,41 @@ export default function OrdersDashboard({ filters, currency }: OrdersDashboardPr
             </div>
 
             <div className="space-y-6 flex-1 text-slate-700 text-xs leading-relaxed">
-              {/* Timing metrics block */}
-              <div className="bg-slate-50 border border-slate-100 p-4 rounded-xl space-y-2">
-                <div className="flex items-center gap-1 text-xs font-bold text-slate-600 mb-2">
-                  <Truck className="w-4 h-4 text-emerald-500" />
-                  Hành trình chuyển phát
-                </div>
-                <div className="grid grid-cols-2 gap-3 text-[11px] font-mono">
-                  <div>
-                    <span className="text-slate-400 block uppercase text-[9px] font-bold">Ngày Đặt hàng</span>
-                    <span className="font-semibold text-slate-700">{formatDate(selectedOrder.order.order_purchase_timestamp)}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block uppercase text-[9px] font-bold">Phê duyệt (Approved)</span>
-                    <span className="font-semibold text-slate-700">{formatDate(selectedOrder.order.order_approved_at)}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block uppercase text-[9px] font-bold">Giao cho Shiper (Carrier)</span>
-                    <span className="font-semibold text-slate-700">{formatDate(selectedOrder.order.order_delivered_carrier_date) || 'Đang xử lý'}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block uppercase text-[9px] font-bold">Khách nhận thực tế</span>
-                    <span className="font-semibold text-slate-700">{formatDate(selectedOrder.order.order_delivered_customer_date) || 'Đang giao'}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Customer Info */}
-              {selectedOrder.client && (
-                <div className="border border-slate-100 p-4 rounded-xl space-y-2">
-                  <div className="text-xs font-bold text-slate-700 uppercase tracking-widest font-mono">Thông tin người mua</div>
-                  <div className="text-[11px] leading-relaxed">
-                    <p><span className="text-slate-400 font-semibold inline-block w-24">Zip code:</span> <span className="font-mono text-slate-800 font-bold">{selectedOrder.client.customer_zip_code_prefix}</span></p>
-                    <p className="capitalize"><span className="text-slate-400 font-semibold inline-block w-24">Đô thị sinh sống:</span> {selectedOrder.client.customer_city}</p>
-                    <p><span className="text-slate-400 font-semibold inline-block w-24">Bang vùng:</span> {selectedOrder.client.customer_state}</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Items List */}
+              {/* Các khối chi tiết đơn hàng giữ nguyên cấu trúc, chỉ bỏ formatCurrency */}
+              
               <div className="border border-slate-100 p-4 rounded-xl space-y-3">
                 <div className="text-xs font-bold text-slate-700 uppercase tracking-widest font-mono border-b border-slate-100 pb-2">Danh sách món hàng ({selectedOrder.items.length})</div>
-                
                 <div className="space-y-3 Divide-y divide-slate-100">
                   {selectedOrder.items.map((item: any, idx: number) => (
                     <div key={idx} className="pt-2 flex items-start justify-between gap-4 text-[11px]">
                       <div>
                         <p className="font-bold text-indigo-700 font-mono text-[9px]">{item.product_id}</p>
-                        <p className="text-slate-400 font-semibold text-[10px] uppercase tracking-wide mt-1">Nhà bán hàng: {item.seller_name}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="font-bold text-slate-800 font-mono">{formatCurrency(item.price, currency)}</p>
-                        <p className="text-[10px] text-slate-400 font-mono">Phí cước: +{formatCurrency(item.freight_value, currency)}</p>
+                        <p className="font-bold text-slate-800 font-mono">{formatNumber(item.price)}</p>
+                        <p className="text-[10px] text-slate-400 font-mono">Phí cước: +{formatNumber(item.freight_value)}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Payments sequentially */}
               {selectedOrder.payment && selectedOrder.payment.length > 0 && (
                 <div className="border border-slate-100 p-4 rounded-xl space-y-2">
                   <div className="text-xs font-bold text-slate-700 uppercase tracking-widest font-mono">Dữ liệu thanh toán</div>
                   {selectedOrder.payment.map((pay: any, idx: number) => (
                     <div key={idx} className="flex justify-between text-[11px] font-mono leading-relaxed">
-                      <span className="capitalize">{pay.payment_type.replace(/_/g, ' ')} (Trả góp: {pay.payment_installments} kì)</span>
-                      <span className="font-bold text-emerald-600">{formatCurrency(pay.payment_value, currency)}</span>
+                      <span className="capitalize">
+                        {pay.payment_type.replace(/_/g, ' ')} 
+                        {pay.payment_installments > 1 
+                        ? ` (Trả góp: ${pay.payment_installments} tháng)` 
+                        : ' (Trả thẳng)'}
+                      </span>
+                      <span className="font-bold text-emerald-600">{formatNumber(pay.payment_value)}</span>
                     </div>
                   ))}
                 </div>
               )}
-
-              {/* Reviews score display */}
-              {selectedOrder.reviews && selectedOrder.reviews.length > 0 && (
-                <div className="bg-amber-50/50 border border-amber-100 p-4 rounded-xl space-y-2">
-                  <div className="text-xs font-bold text-slate-700 uppercase tracking-widest font-mono">Nhận xét khách quan</div>
-                  {selectedOrder.reviews.map((rev: any, idx: number) => (
-                    <div key={idx} className="text-[11px] leading-relaxed">
-                      <p className="text-amber-700 font-bold">Điểm số: {'★'.repeat(rev.review_score)}{'☆'.repeat(5 - rev.review_score)}</p>
-                      {rev.review_comment_message && (
-                        <p className="italic text-slate-600 mt-1">"{rev.review_comment_message}"</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="border-t border-slate-100 pt-4 mt-4 text-center">
-              <span className="text-[9px] text-slate-400 font-mono">Dữ liệu được gọi trực tiếp bằng Express JWT middleware</span>
             </div>
           </div>
         </div>

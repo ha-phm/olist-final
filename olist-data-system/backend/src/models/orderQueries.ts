@@ -88,8 +88,8 @@ export async function fetchOrdersMetrics(filters?: OrderFilters) {
 
     const deliveryQuery = `
       SELECT 
-        TO_CHAR(o.order_purchase_timestamp::timestamp, 'Mon') as month_name,
-        EXTRACT(MONTH FROM o.order_purchase_timestamp::timestamp) as month_num,
+        TO_CHAR(o.order_purchase_timestamp::timestamp, 'Mon YYYY') as month_name,
+        TO_CHAR(o.order_purchase_timestamp::timestamp, 'YYYY-MM') as sort_date,
         AVG(EXTRACT(EPOCH FROM (o.order_delivered_customer_date::timestamp - o.order_purchase_timestamp::timestamp)) / 86400) as speed,
         AVG(EXTRACT(EPOCH FROM (o.order_estimated_delivery_date::timestamp - o.order_purchase_timestamp::timestamp)) / 86400) as estimated
       FROM olist_orders o
@@ -97,8 +97,8 @@ export async function fetchOrdersMetrics(filters?: OrderFilters) {
       ${whereClause ? whereClause + ' AND' : 'WHERE'} 
         o.order_delivered_customer_date IS NOT NULL 
         AND o.order_estimated_delivery_date IS NOT NULL
-      GROUP BY month_name, month_num
-      ORDER BY month_num ASC
+      GROUP BY month_name, sort_date
+      ORDER BY sort_date ASC
     `;
     const deliveryResult = await db.query(deliveryQuery, params);
     
@@ -166,7 +166,15 @@ export async function searchOlistOrders(queryText?: string) {
   }
 
   query += ` 
-    GROUP BY o.order_id, c.customer_city, c.customer_state, p.payment_value, p.payment_type 
+    GROUP BY 
+      o.order_id, 
+      o.customer_id, 
+      o.order_status, 
+      o.order_purchase_timestamp,
+      c.customer_city, 
+      c.customer_state, 
+      p.payment_value, 
+      p.payment_type 
     ORDER BY o.order_purchase_timestamp DESC
     LIMIT 100 
   `;
@@ -206,7 +214,7 @@ export async function getOrderDetailsData(orderId: string) {
         s.seller_state
       FROM olist_order_items i
       LEFT JOIN olist_products p ON i.product_id = p.product_id
-      LEFT JOIN clean_translations t ON p.product_category_name = t.product_category_name
+      LEFT JOIN olist_category_translations t ON p.product_category_name = t.product_category_name
       LEFT JOIN olist_sellers s ON i.seller_id = s.seller_id
       WHERE i.order_id = $1
     `;
