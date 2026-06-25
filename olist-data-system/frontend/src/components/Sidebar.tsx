@@ -1,6 +1,6 @@
 import { 
   BarChart3, Users, Package, ShoppingCart, 
-  Store, Star, Search, Shield, Info, LogOut
+  Store, Star
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -62,14 +62,13 @@ export default function Sidebar({ currentPage, onPageChange, currentUser }: Side
   return (
     <aside id="app-sidebar" className="bg-slate-900 text-slate-100 w-64 min-h-screen flex flex-col border-r border-slate-800">
       {/* Brand Header */}
-      <div className="flex items-center justify-center gap-2 px-6 py-6 border-b border-slate-800">
-        <div className="bg-indigo-600 p-2 rounded-xl shadow-md">
-          <BarChart3 className="w-5 h-5 text-white" />
-        </div>
-        <div className="text-left">
-          <h1 className="font-sans font-bold text-sm tracking-widest text-indigo-400 leading-tight">OLIST</h1>
-          <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Data Hub System</p>
-        </div>
+      <div className="flex flex-col items-center justify-center mt-6 mb-8 w-full text-center">
+        <span className="text-2xl font-black text-indigo-500 tracking-[0.2em] uppercase">
+           OLIST
+        </span>
+        <span className="text-[10px] font-bold text-slate-400 tracking-widest mt-1">
+           DATA VISUALIZATION SYSTEM
+        </span>
       </div>
 
       {/* Navigation menu */}
