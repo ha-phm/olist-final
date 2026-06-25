@@ -57,7 +57,7 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
         <div>
           <h2 className="font-sans font-black text-xl text-slate-800 tracking-tight flex items-center gap-2">
             <Users className="w-5 h-5 text-emerald-600" />
-            Bảng điều khiển Khách Hàng (Customers Panel)
+            Bảng điều khiển Khách Hàng 
           </h2>
           <p className="text-xs text-slate-400 mt-1">
             Phân tích tệp địa lý khách hàng, tần suất quay lại mua hàng, giá trị đơn hàng trung bình (AOV).
@@ -83,7 +83,6 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
           value={formatNumber(kpis.new_customers)}
           icon={UserPlus}
           color="indigo"
-          trend={78}
           subtext="Chiếm % tệp kh đầu tiên"
         />
         <KPIWidget
@@ -92,13 +91,12 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
           value={formatNumber(kpis.returning_customers)}
           icon={UserCheck}
           color="amber"
-          trend={22}
           subtext="Tỉ lệ mua lại trung bình"
         />
         <KPIWidget
           id="kpi-aov-cust"
           title="Đơn giá trị trung bình (AOV)"
-          value={formatCurrency(kpis.avg_order_value, currency)}
+          value={kpis.avg_order_value ? kpis.avg_order_value.toFixed(2) : "0"}
           icon={Percent}
           color="blue"
           subtext="Mỗi giỏ hàng thanh toán"

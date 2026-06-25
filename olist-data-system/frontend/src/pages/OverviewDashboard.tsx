@@ -71,11 +71,13 @@ export default function OverviewDashboard({ filters, currency }: OverviewDashboa
         <KPIWidget
           id="kpi-revenue"
           title="Tổng doanh thu"
-          value={formatCurrency(kpis.total_revenue)}
+          value={
+            kpis.total_revenue >= 1000000 
+              ? `${(kpis.total_revenue / 1000000).toFixed(2)}M` 
+              : formatNumber(kpis.total_revenue)
+          }
           icon={DollarSign}
           color="indigo"
-          trend={growthRate}
-          subtext="Tháng này so với trước"
         />
         <KPIWidget
           id="kpi-orders"
