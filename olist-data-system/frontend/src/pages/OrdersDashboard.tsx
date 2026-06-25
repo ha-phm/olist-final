@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  ShoppingCart, CheckCircle2, Loader, XCircle, Search, 
-  ArrowRight, Landmark, Eye, Info, Truck 
+  ShoppingCart, CheckCircle2, Loader, XCircle, Search, Eye, Truck 
 } from 'lucide-react';
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, 
+  XAxis, YAxis, CartesianGrid, Tooltip, 
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend 
 } from 'recharts';
 import { motion } from 'motion/react';
 
 import KPIWidget from '../components/KPIWidget';
-import ExportButtons from '../components/ExportButtons';
 import { dashboardService, orderService } from '../services/api';
 // Thay formatCurrency bằng formatNumber
-import { formatNumber, formatDate } from '../utils/format';
+import { formatNumber} from '../utils/format';
 
 interface OrdersDashboardProps {
-  filters: any;
-  currency: 'BRL' | 'VND' | 'USD'; // Giữ nguyên kiểu dữ liệu currency
-  // Đã xóa biến currency ở đây
+  filters: any
 }
 
 // Bộ từ điển màu sắc cố định cho từng trạng thái
@@ -124,8 +120,6 @@ export default function OrdersDashboard({ filters }: OrdersDashboardProps) {
             Quản trị trạng thái giao dịch, lượng đơn hoàn thành và thời gian chuyển phát.
           </p>
         </div>
-
-        <ExportButtons title="Quản lý hóa đơn đơn hàng" data={data} />
       </div>
 
       {/* KPI Widgets */}

@@ -9,7 +9,6 @@ import {
 import { motion } from 'motion/react';
 
 import KPIWidget from '../components/KPIWidget';
-import ExportButtons from '../components/ExportButtons';
 import { dashboardService } from '../services/api';
 import { formatNumber } from '../utils/format';
 
@@ -67,19 +66,18 @@ export default function ReviewsDashboard({ filters }: ReviewsDashboardProps) {
         <div>
           <h2 className="font-sans font-black text-xl text-slate-800 tracking-tight flex items-center gap-2">
             <Star className="w-5 h-5 text-indigo-600" />
-            Bảng điều khiển Đánh Giá (Review & Sentiment Board)
+            Bảng điều khiển Đánh Giá 
           </h2>
           <p className="text-xs text-slate-400 mt-1">
             Khám phá nguyên nhân cốt lõi đằng sau sự sụt giảm hài lòng và rà soát các nhà bán hàng vi phạm.
           </p>
         </div>
-        <ExportButtons title="Quản lý đánh giá khách hàng" data={data} />
       </div>
 
       {/* KPI Widgets */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <KPIWidget id="kpi-avg-review" title="Điểm số đánh giá trung bình" value={`${kpis.avg_rating} / 5.0`} icon={Star} color="amber" subtext="Tổng quan chỉ số hài lòng toàn sàn" />
-        <KPIWidget id="kpi-total-reviews" title="Khảo sát nhận xét thu về" value={formatNumber(kpis.total_reviews)} icon={MessageSquare} color="blue" subtext="Số phản hồi đánh giá hợp lệ" />
+        <KPIWidget id="kpi-avg-review" title="Điểm số đánh giá trung bình" value={`${kpis.avg_rating} / 5.0`} icon={Star} color="amber" />
+        <KPIWidget id="kpi-total-reviews" title="Khảo sát nhận xét thu về" value={formatNumber(kpis.total_reviews)} icon={MessageSquare} color="blue" />
       </div>
 
       {/* DÒNG 1: Tương quan & Phân phối */}
@@ -89,7 +87,6 @@ export default function ReviewsDashboard({ filters }: ReviewsDashboardProps) {
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
               <Truck className="w-4 h-4 text-indigo-500" /> Tương quan: Thời gian giao hàng & Điểm đánh giá
             </h3>
-            <span className="text-[10px] bg-indigo-50 text-indigo-700 font-mono font-bold px-2 py-0.5 rounded-sm">Root-Cause Analysis</span>
           </div>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -136,7 +133,7 @@ export default function ReviewsDashboard({ filters }: ReviewsDashboardProps) {
         <div className="bg-white border border-slate-100 rounded-2xl shadow-xs xl:col-span-2 overflow-hidden flex flex-col">
           <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5 px-2">
-              <TrendingDown className="w-4 h-4 text-rose-500" /> Đối tượng có tỉ lệ bị chê (1-2 sao) cao nhất
+              Đối tượng có tỉ lệ bị chê (1-2 sao) cao nhất
             </h3>
             
             {/* Thanh chuyển đổi Tab */}
@@ -193,7 +190,6 @@ export default function ReviewsDashboard({ filters }: ReviewsDashboardProps) {
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
               <Clock className="w-4 h-4 text-emerald-500" /> Tốc độ Khách gửi Đánh giá
             </h3>
-            <span className="text-[10px] bg-emerald-50 text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-sm">Survey Response</span>
           </div>
           <div className="h-40 w-full flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
@@ -223,11 +219,9 @@ export default function ReviewsDashboard({ filters }: ReviewsDashboardProps) {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white border border-rose-100 rounded-2xl shadow-sm overflow-hidden">
         <div className="p-6 border-b border-rose-100 bg-rose-50/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h3 className="font-sans font-bold text-sm text-rose-800 tracking-tight flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
-              Trạm Xử lý Khủng hoảng (Critical Reviews Ticketing)
+            <h3 className="font-sans font-bold text-sm text-rose-800 tracking-tight flex items-center gap-1.5">   
+              Danh sách các Đơn hàng bị khách hàng chê trách (Dưới 3 sao kèm bình luận). Cần xử lý gấp!
             </h3>
-            <p className="text-[11px] text-rose-600/70 mt-0.5">Danh sách các Đơn hàng bị khách hàng chê trách (Dưới 3 sao kèm bình luận). Cần xử lý gấp!</p>
           </div>
           
           <div className="flex items-center gap-2 max-w-sm w-full relative">
@@ -246,11 +240,10 @@ export default function ReviewsDashboard({ filters }: ReviewsDashboardProps) {
           <table className="w-full border-collapse">
             <thead className="sticky top-0 bg-white shadow-xs z-10">
               <tr className="bg-slate-50/90 backdrop-blur-md border-b border-slate-100 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">
-                <th className="py-4 px-6">Ngày ĐG</th>
+                <th className="py-4 px-6">Ngày Đánh giá</th>
                 <th className="py-4 px-6">Mã Đơn Hàng (Order ID)</th>
                 <th className="py-4 px-6 text-center">Điểm</th>
                 <th className="py-4 px-6 w-1/2">Nội dung khách hàng phàn nàn</th>
-                <th className="py-4 px-6 text-center">Hành động</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-sans text-xs text-slate-600">
@@ -269,11 +262,6 @@ export default function ReviewsDashboard({ filters }: ReviewsDashboardProps) {
                       </span>
                     </td>
                     <td className="py-4 px-6 italic text-slate-700">"{r.message}"</td>
-                    <td className="py-4 px-6 text-center">
-                      <button className="bg-rose-600 hover:bg-rose-700 text-white font-bold py-1.5 px-3 rounded-lg text-[10px] uppercase tracking-wider transition-colors">
-                        Tạo Ticket
-                      </button>
-                    </td>
                   </tr>
                 ))
               )}

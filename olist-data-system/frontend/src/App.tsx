@@ -15,7 +15,6 @@ import { authService, dashboardService } from './services/api';
 export default function AppMain() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState('overview');
-  const [currency, setCurrency] = useState<'BRL' | 'VND' | 'USD'>('BRL');
   
   // Dynamic filter contexts loaded globally
   const [categories, setCategories] = useState<any[]>([]);

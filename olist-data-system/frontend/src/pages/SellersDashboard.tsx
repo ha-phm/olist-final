@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { 
-  Store, Star, Award, AlertTriangle, Trophy, MapPin, PieChart as PieChartIcon, Search, Filter, TrendingDown
+  Store, Star, AlertTriangle, Trophy, MapPin, PieChart as PieChartIcon, Search, Filter, TrendingDown
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { 
@@ -9,7 +9,6 @@ import {
 } from 'recharts';
 
 import KPIWidget from '../components/KPIWidget';
-import ExportButtons from '../components/ExportButtons';
 import { dashboardService } from '../services/api';
 import { formatNumber } from '../utils/format';
 
@@ -87,13 +86,12 @@ export default function SellersDashboard({ filters }: SellersDashboardProps) {
         <div>
           <h2 className="font-sans font-black text-xl text-slate-800 tracking-tight flex items-center gap-2">
             <Store className="w-5 h-5 text-indigo-600" />
-            Bảng điều khiển Người Bán (Sellers Board)
+            Bảng điều khiển Người Bán 
           </h2>
           <p className="text-xs text-slate-400 mt-1">
             Giám sát hiệu suất bán hàng, thống kê doanh nghiệp và quản lý rủi ro SLA.
           </p>
         </div>
-        <ExportButtons title="Báo cáo người bán" data={data} />
       </div>
 
       {/* KPI Widgets */}
@@ -126,7 +124,7 @@ export default function SellersDashboard({ filters }: SellersDashboardProps) {
         <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-xs flex flex-col">
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
-              <PieChartIcon className="w-4 h-4 text-amber-500" /> Phân khúc chất lượng (Stars)
+              <PieChartIcon className="w-4 h-4 text-amber-500" /> Phân khúc chất lượng 
             </h3>
           </div>
           <div className="flex-1 w-full flex items-center justify-center min-h-[220px]">
@@ -157,9 +155,8 @@ export default function SellersDashboard({ filters }: SellersDashboardProps) {
           <div>
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
               <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
-                <Trophy className="w-4 h-4 text-amber-500" /> Xếp hạng đối tác cung cấp dịch vụ tốt nhất
+                Xếp hạng đối tác cung cấp dịch vụ tốt nhất
               </h3>
-              <span className="text-xs text-slate-400 font-medium font-mono">Top 5 sellers</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
@@ -203,9 +200,8 @@ export default function SellersDashboard({ filters }: SellersDashboardProps) {
           <div>
             <div className="p-6 border-b border-slate-100 flex items-center justify-between">
               <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
-                <TrendingDown className="w-4 h-4 text-rose-500" /> Khu vực yếu thế về năng lực
+                Khu vực yếu thế
               </h3>
-              <span className="text-[10px] bg-rose-50 text-rose-700 font-mono font-bold px-1.5 py-0.5 rounded-sm">SLA Warning</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
@@ -237,7 +233,7 @@ export default function SellersDashboard({ filters }: SellersDashboardProps) {
         <div className="p-6 border-b border-slate-100 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
           <div>
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
-              <AlertTriangle className="w-4 h-4 text-amber-500" /> System Monitor: Hệ thống rà soát vi phạm SLA & Chất lượng
+              System Monitor: Hệ thống rà soát vi phạm SLA & Chất lượng
             </h3>
             <p className="text-[11px] text-slate-400 mt-0.5">Sử dụng bộ lọc để phát hiện các đối tác đang nằm trong vùng rủi ro cần xử lý.</p>
           </div>

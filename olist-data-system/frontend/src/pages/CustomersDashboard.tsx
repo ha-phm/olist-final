@@ -4,21 +4,19 @@ import {
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, 
-  ResponsiveContainer, PieChart, Pie, Cell, Legend 
+  ResponsiveContainer, PieChart, Pie, Cell
 } from 'recharts';
 import { motion } from 'motion/react';
 
 import KPIWidget from '../components/KPIWidget';
-import ExportButtons from '../components/ExportButtons';
 import { dashboardService } from '../services/api';
-import { formatNumber, formatCurrency } from '../utils/format';
+import { formatNumber } from '../utils/format';
 
 interface CustomersDashboardProps {
-  filters: any;
-  currency: 'BRL' | 'VND' | 'USD';
+  filters: any
 }
 
-export default function CustomersDashboard({ filters, currency }: CustomersDashboardProps) {
+export default function CustomersDashboard({ filters }: CustomersDashboardProps) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -63,8 +61,6 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
             Phân tích tệp địa lý khách hàng, tần suất quay lại mua hàng, giá trị đơn hàng trung bình (AOV).
           </p>
         </div>
-
-        <ExportButtons title="Quản lý khách hàng" data={data} />
       </div>
 
       {/* KPIs Grid */}
@@ -83,7 +79,6 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
           value={formatNumber(kpis.new_customers)}
           icon={UserPlus}
           color="indigo"
-          subtext="Chiếm % tệp kh đầu tiên"
         />
         <KPIWidget
           id="kpi-returning-cust"
@@ -91,7 +86,6 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
           value={formatNumber(kpis.returning_customers)}
           icon={UserCheck}
           color="amber"
-          subtext="Tỉ lệ mua lại trung bình"
         />
         <KPIWidget
           id="kpi-aov-cust"
@@ -115,11 +109,8 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
           <div className="flex items-center justify-between">
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
               <Map className="w-4 h-4 text-emerald-500" />
-              Mật độ phân chia khách hàng theo Bang (States Split)
+              Mật độ phân chia khách hàng theo Bang 
             </h3>
-            <span className="text-[10px] bg-emerald-50 text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-sm">
-              Sắp xếp theo State
-            </span>
           </div>
 
           <div className="h-80 w-full">
@@ -153,47 +144,66 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
           <div className="flex items-center justify-between">
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
               <PieChartIcon className="w-4 h-4 text-indigo-500" />
-              Tần suất mua hàng (Frequency)
+              Tần suất mua hàng 
             </h3>
-            <span className="text-[10px] bg-indigo-50 text-indigo-700 font-mono font-bold px-2 py-0.5 rounded-sm">
-              Đếm số hóa đơn
-            </span>
           </div>
 
-          <div className="h-64 w-full flex items-center justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={frequencyData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="quantity"
-                >
-                  {frequencyData.map((entry: any, index: number) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          {(() => {
+            const FREQ_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+            
+            // ÉP CỨNG DỮ LIỆU LUÔN LUÔN CÓ ĐỦ 4 HẠNG MỤC
+            // Tìm dữ liệu tương ứng từ Backend trả về, nếu không có thì gán quantity = 0
+            const normalizedData = [
+              { name: "1 Đơn", quantity: frequencyData?.find((d: any) => d.name === "1 Đơn" || d.name === "1 đơn")?.quantity || 0 },
+              { name: "2 Đơn", quantity: frequencyData?.find((d: any) => d.name === "2 Đơn" || d.name === "2 đơn")?.quantity || 0 },
+              { name: "3 Đơn", quantity: frequencyData?.find((d: any) => d.name === "3 Đơn" || d.name === "3 đơn")?.quantity || 0 },
+              { name: "4+ Đơn", quantity: frequencyData?.find((d: any) => d.name === "4+ Đơn" || d.name === "4+ đơn" || d.name.includes("4"))?.quantity || 0 }
+            ];
+
+            // Nếu dữ liệu Backend trả về không theo format "1 Đơn", "2 Đơn" thì dùng tạm mock data để test UI
+            const safeData = normalizedData[0].quantity === 0 && frequencyData.length > 0 
+                ? frequencyData // Nếu tên không khớp, cứ dùng data gốc
+                : normalizedData;
+            
+            return (
+              <>
+                <div className="h-64 w-full flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={safeData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="quantity"
+                      >
+                        {safeData.map((entry: any, index: number) => (
+                          <Cell key={`cell-${index}`} fill={FREQ_COLORS[index % FREQ_COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '12px' }}
+                        itemStyle={{ color: '#fff', fontSize: '11px' }}
+                        formatter={(val: number) => [`${formatNumber(val)} Thẻ`, 'Khách hàng']}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-center text-xs border-t border-slate-100 pt-4">
+                  {safeData.map((f: any, idx: number) => (
+                    <div key={idx} className="flex items-center justify-start gap-1 p-1">
+                      <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: FREQ_COLORS[idx % FREQ_COLORS.length] }}></span>
+                      <span className="text-[11px] font-semibold text-slate-600">{f.name}: </span>
+                      <span className="text-[11px] font-mono font-bold text-slate-800">{formatNumber(f.quantity)}</span>
+                    </div>
                   ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '12px' }}
-                  itemStyle={{ color: '#fff', fontSize: '11px' }}
-                  formatter={(val: number) => [`${formatNumber(val)} Thẻ`, 'Khách hàng']}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 text-center text-xs border-t border-slate-100 pt-4">
-            {frequencyData.map((f: any, idx: number) => (
-              <div key={idx} className="flex items-center justify-start gap-1 p-1">
-                <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></span>
-                <span className="text-[11px] font-semibold text-slate-600">{f.name}: </span>
-                <span className="text-[11px] font-mono font-bold text-slate-800">{formatNumber(f.quantity)}</span>
-              </div>
-            ))}
-          </div>
+                </div>
+              </>
+            );
+          })()}
         </motion.div>
 
       </div>
@@ -206,7 +216,7 @@ export default function CustomersDashboard({ filters, currency }: CustomersDashb
       >
         <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
           <BarChart3 className="w-4 h-4 text-emerald-500" />
-          Danh sách đô thị (Cities) có mật độ khách hàng lớn nhất
+          Danh sách đô thị có mật độ khách hàng lớn nhất
         </h3>
         
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">

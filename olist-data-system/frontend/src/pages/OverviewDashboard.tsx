@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { 
   DollarSign, ShoppingCart, Users, Package, Store, 
-  ArrowUpRight, BarChart3, Presentation, Compass, Flame 
+  BarChart3, Presentation, Compass
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, 
@@ -9,16 +9,14 @@ import {
 import { motion } from 'motion/react';
 
 import KPIWidget from '../components/KPIWidget';
-import ExportButtons from '../components/ExportButtons';
 import { dashboardService } from '../services/api';
-import { formatCurrency, formatNumber } from '../utils/format';
+import {  formatNumber } from '../utils/format';
 
 interface OverviewDashboardProps {
-  filters: any;
-  currency: 'BRL' | 'VND' | 'USD';
+  filters: any
 }
 
-export default function OverviewDashboard({ filters, currency }: OverviewDashboardProps) {
+export default function OverviewDashboard({ filters }: OverviewDashboardProps) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,9 +59,6 @@ export default function OverviewDashboard({ filters, currency }: OverviewDashboa
             Tổng hợp dữ liệu e-commerce Olist, phân tích xu hướng tăng trưởng doanh thu tháng/năm.
           </p>
         </div>
-
-        {/* Export buttons */}
-        <ExportButtons title="Tổng quan doanh thu" data={data} />
       </div>
 
       {/* KPI Display widgets */}

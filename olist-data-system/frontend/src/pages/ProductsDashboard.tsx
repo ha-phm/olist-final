@@ -9,7 +9,6 @@ import {
 import { motion } from 'motion/react';
 
 import KPIWidget from '../components/KPIWidget';
-import ExportButtons from '../components/ExportButtons';
 import { dashboardService } from '../services/api';
 import { formatNumber, formatCurrency } from '../utils/format';
 
@@ -57,14 +56,12 @@ export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
         <div>
           <h2 className="font-sans font-black text-xl text-slate-800 tracking-tight flex items-center gap-2">
             <Package className="w-5 h-5 text-indigo-600" />
-            Bảng điều khiển Sản Phẩm (Products Inventory Board)
+            Bảng điều khiển Sản Phẩm 
           </h2>
           <p className="text-xs text-slate-400 mt-1">
             Theo dõi khối lượng sản phẩm, danh mục hàng hóa hàng đầu và đánh giá doanh thu sản phẩm tốt nhất.
           </p>
         </div>
-
-        <ExportButtons title="Quản lý sản phẩm" data={data} />
       </div>
 
       {/* KPI Widgets */}
@@ -99,11 +96,8 @@ export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
           <div className="flex items-center justify-between">
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
               <BarChart3 className="w-4 h-4 text-indigo-500" />
-              Sản lượng bán theo Danh mục ngành hàng (Categories distribution)
+              Sản lượng bán theo Danh mục ngành hàng 
             </h3>
-            <span className="text-[10px] bg-indigo-50 text-indigo-700 font-mono font-bold px-2 py-0.5 rounded-sm">
-              Doanh số bán ra
-            </span>
           </div>
 
           <div className="h-80 w-full font-mono text-xs">
@@ -143,9 +137,6 @@ export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
               <PieChartIcon className="w-4 h-4 text-emerald-500" />
               Doanh thu Ước Tính tỷ lệ
             </h3>
-            <span className="text-[10px] bg-emerald-50 text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-sm">
-              Doanh thu
-            </span>
           </div>
 
           <div className="space-y-4 flex-1 overflow-y-auto max-h-[310px] pr-2">
@@ -184,8 +175,7 @@ export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
       >
         <div className="p-6 border-b border-slate-50 flex items-center justify-between">
           <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
-            <ArrowUpRight className="w-4 h-4 text-indigo-500" />
-            Top 5 sản phẩm bán chạy nhất hệ thống (Best Selling Items)
+            Top 5 sản phẩm bán chạy nhất hệ thống 
           </h3>
           <span className="text-xs text-slate-400 font-medium">Lượng hóa đơn & doanh số</span>
         </div>
