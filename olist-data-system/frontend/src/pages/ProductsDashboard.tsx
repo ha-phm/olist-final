@@ -10,7 +10,7 @@ import { motion } from 'motion/react';
 
 import KPIWidget from '../components/KPIWidget';
 import { dashboardService } from '../services/api';
-import { formatNumber, formatCurrency } from '../utils/format';
+import { formatNumber } from '../utils/format';
 
 interface ProductsDashboardProps {
   filters: any;
@@ -48,9 +48,6 @@ export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
   const currency = 'VND';
   const COLORS = ['#4f46e5', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4'];
 
-  // ==========================================
-  // ĐÃ SỬA: TÍNH TỔNG DOANH THU TOÀN BỘ NGÀNH HÀNG
-  // ==========================================
   const totalRevenue = categoryDistribution?.reduce((sum: number, item: any) => sum + (item.revenue || 0), 0) || 1;
 
   return (
@@ -219,7 +216,7 @@ export default function ProductsDashboard({ filters}: ProductsDashboardProps) {
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right font-mono font-bold text-slate-800">{formatNumber(p.orders)}</td>
-                  <td className="py-4 px-6 text-right font-mono font-bold text-indigo-600">{formatCurrency(p.revenue, currency)}</td>
+                  <td className="py-4 px-6 text-right font-mono font-bold text-indigo-600">{formatNumber(p.revenue)}</td>
                 </tr>
               ))}
             </tbody>

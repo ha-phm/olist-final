@@ -100,8 +100,7 @@ export default function SellersDashboard({ filters }: SellersDashboardProps) {
         <KPIWidget id="kpi-sellers-rating" title="Điểm tích hợp trung bình" value={`${kpis.avg_seller_rating} / 5.0`} icon={Star} color="amber" subtext="Tính trên mọi đánh giá của khách" />
       </div>
 
-      {/* Analytics Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
+      {/* Biểu đồ Cột */}
         <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-xs lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
@@ -114,34 +113,24 @@ export default function SellersDashboard({ filters }: SellersDashboardProps) {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                 <XAxis dataKey="state" stroke="#94a3b8" fontSize={11} tickMargin={10} />
                 <YAxis stroke="#94a3b8" fontSize={11} />
-                <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '12px' }} itemStyle={{ color: '#fff', fontSize: '12px' }} formatter={(val: number) => [formatNumber(val), 'Nhà bán']} />
+                
+                {/* ĐÃ SỬA: Tooltip nền trắng, chữ xám đậm */}
+                <Tooltip 
+                  cursor={{ fill: '#f8fafc' }} 
+                  contentStyle={{ 
+                    background: '#ffffff', 
+                    border: '1px solid #e2e8f0', 
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' 
+                  }} 
+                  itemStyle={{ color: '#334155', fontSize: '12px', fontWeight: 'bold' }} 
+                  formatter={(val: number) => [formatNumber(val), 'Nhà bán']} 
+                />
                 <Bar dataKey="value" fill="#6366f1" radius={[4, 4, 0, 0]} barSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-
-        <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-xs flex flex-col">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
-              <PieChartIcon className="w-4 h-4 text-amber-500" /> Phân khúc chất lượng 
-            </h3>
-          </div>
-          <div className="flex-1 w-full flex items-center justify-center min-h-[220px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={ratingData} cx="50%" cy="45%" innerRadius={50} outerRadius={75} paddingAngle={5} dataKey="value">
-                  {ratingData.map((entry: any, index: number) => (
-                    <Cell key={`cell-${index}`} fill={RATING_COLORS[index % RATING_COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={{ background: '#0f172a', border: 'none', borderRadius: '12px' }} itemStyle={{ color: '#fff', fontSize: '11px' }} formatter={(val: number) => [`${formatNumber(val)} đối tác`, 'Số lượng']} />
-                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
 
       {/* THAY ĐỔI CẤU TRÚC GRID: Chia không gian cho Top Sellers và Khu vực yếu thế */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -235,7 +224,6 @@ export default function SellersDashboard({ filters }: SellersDashboardProps) {
             <h3 className="font-sans font-bold text-sm text-slate-800 tracking-tight flex items-center gap-1.5">
               System Monitor: Hệ thống rà soát vi phạm SLA & Chất lượng
             </h3>
-            <p className="text-[11px] text-slate-400 mt-0.5">Sử dụng bộ lọc để phát hiện các đối tác đang nằm trong vùng rủi ro cần xử lý.</p>
           </div>
           
           <div className="flex flex-col sm:flex-row items-center gap-3">
